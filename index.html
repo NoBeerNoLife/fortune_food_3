@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>今日のラッキーフード占い</title>
+  <style>
+    /* 全体の設定 */
+    body {
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      background-color: #fdf6e3; /* 優しいクリーム色 */
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* カード風のコンテナ */
+    .container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #ff6b6b;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    /* 入力エリア */
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #ff6b6b;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff4757;
+    }
+
+    /* 結果エリア */
+    #resultArea {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px dashed #ddd;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #fortuneTitle {
+      font-size: 2rem;
+      color: #e1b12c;
+      margin: 0.5rem 0;
+    }
+
+    #fortuneMessage {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .lucky-food {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    #userFood {
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+
+    /* アニメーション */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🍽️ 今日の運勢占い</h1>
+    <p>今日食べたいものを入力してね！</p>
+
+    <div class="input-group">
+      <input type="text" id="foodInput" placeholder="例：ラーメン、カレー..." autocomplete="off" />
+      <button id="fortuneBtn">占う</button>
+    </div>
+
+    <div id="resultArea" class="hidden">
+      <h2 id="fortuneTitle"></h2>
+      <p id="fortuneMessage"></p>
+      <p class="lucky-food">あなたが選んだ「<span id="userFood"></span>」<br />運気上昇の鍵ですね！</p>
+    </div>
+  </div>
+
+  <script>
+    // 運勢データのリスト
+    const fortunes = [
+      { type: "大吉", message: "最高の一日になりそう！美味しいものを食べてさらに運気アップ！" },
+      { type: "中吉", message: "良いことが起こる予感。食後のデザートもおすすめ。" },
+      { type: "小吉", message: "ささやかな幸せが見つかるかも。よく噛んで食べましょう。" },
+      { type: "吉", message: "安定した一日です。いつもの味を楽しんで。" },
+      { type: "末吉", message: "焦らずゆっくり食事を楽しめば、運が開けます。" },
+      { type: "凶", message: "今日は冒険せずに、好きなものを食べてリラックスしよう。" }
+    ];
+
+    // HTMLの要素を取得
+    const btn = document.getElementById('fortuneBtn');
+    const input = document.getElementById('foodInput');
+    const resultArea = document.getElementById('resultArea');
+    const fortuneTitle = document.getElementById('fortuneTitle');
+    const fortuneMessage = document.getElementById('fortuneMessage');
+    const userFoodSpan = document.getElementById('userFood');
+
+    // ボタンがクリックされた時の処理
+    btn.addEventListener('click', function() {
+      const foodName = input.value.trim(); // 入力された文字を取得（空白削除）
+
+      // 何も入力されていない場合のチェック
+      if (foodName === "") {
+        alert("食べたい食べ物を入力してください！");
+        return;
+      }
+
+      // ランダムに運勢を選ぶ (0 から fortunes.length - 1 までの乱数)
+      const randomIndex = Math.floor(Math.random() * fortunes.length);
+      const result = fortunes[randomIndex];
+
+      // 結果をHTMLにセットする
+      fortuneTitle.textContent = result.type;
+      fortuneMessage.textContent = result.message;
+      userFoodSpan.textContent = foodName;
+
+      // 結果エリアを表示する（hiddenクラスを削除）
+      resultArea.classList.remove('hidden');
+    });
+
+    // Enterキーでも占えるように
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') btn.click();
+    });
+  </script>
+</body>
+</html>
